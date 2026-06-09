@@ -1,0 +1,35 @@
+{
+    "name": "HealPro AI Diagnostics",
+    "short_name": "HealPro",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0D1B2A",
+    "theme_color": "#00BFA5",
+    "description": "An intelligent mobile diagnostic assistant combining symptom analysis with machine learning models for clinical risk prediction.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
