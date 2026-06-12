@@ -30,7 +30,7 @@ class AppTheme {
   static InputDecorationTheme _inputTheme(ColorScheme cs) =>
       InputDecorationTheme(
         filled: true,
-        fillColor: cs.surfaceContainerHighest.withOpacity(0.5),
+        fillColor: cs.surfaceVariant.withOpacity(0.5),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         border: OutlineInputBorder(
@@ -84,7 +84,7 @@ class AppTheme {
       secondary: secondaryColor,
       tertiary: accentColor,
       surface: lightSurface,
-      surfaceContainerHighest: const Color(0xFFEEEDF8),
+      surfaceVariant: const Color(0xFFEEEDF8),
     );
 
     return ThemeData(
@@ -119,10 +119,10 @@ class AppTheme {
       inputDecorationTheme: _inputTheme(cs),
       elevatedButtonTheme: _elevatedBtnTheme(cs),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? primaryColor : Colors.grey[400]),
-        trackColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? primaryColor.withOpacity(0.3) : Colors.grey[200]),
+        thumbColor: MaterialStateProperty.resolveWith(
+            (s) => s.contains(MaterialState.selected) ? primaryColor : Colors.grey[400]),
+        trackColor: MaterialStateProperty.resolveWith(
+            (s) => s.contains(MaterialState.selected) ? primaryColor.withOpacity(0.3) : Colors.grey[200]),
       ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -133,16 +133,16 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: lightSurface,
         indicatorColor: primaryColor.withOpacity(0.12),
-        labelTextStyle: WidgetStateProperty.resolveWith(
+        labelTextStyle: MaterialStateProperty.resolveWith(
           (s) => TextStyle(
             fontSize: 11,
-            fontWeight: s.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-            color: s.contains(WidgetState.selected) ? primaryColor : Colors.grey[500],
+            fontWeight: s.contains(MaterialState.selected) ? FontWeight.w700 : FontWeight.w500,
+            color: s.contains(MaterialState.selected) ? primaryColor : Colors.grey[500],
           ),
         ),
-        iconTheme: WidgetStateProperty.resolveWith(
+        iconTheme: MaterialStateProperty.resolveWith(
           (s) => IconThemeData(
-            color: s.contains(WidgetState.selected) ? primaryColor : Colors.grey[500],
+            color: s.contains(MaterialState.selected) ? primaryColor : Colors.grey[500],
             size: 22,
           ),
         ),
@@ -159,7 +159,7 @@ class AppTheme {
       secondary: secondaryColor,
       tertiary: accentColor,
       surface: darkSurface,
-      surfaceContainerHighest: const Color(0xFF2A2640),
+      surfaceVariant: const Color(0xFF2A2640),
     );
 
     return ThemeData(
@@ -197,10 +197,10 @@ class AppTheme {
       inputDecorationTheme: _inputTheme(cs),
       elevatedButtonTheme: _elevatedBtnTheme(cs),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600]),
-        trackColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected) ? const Color(0xFF64B5F6).withOpacity(0.4) : Colors.grey[800]),
+        thumbColor: MaterialStateProperty.resolveWith(
+            (s) => s.contains(MaterialState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600]),
+        trackColor: MaterialStateProperty.resolveWith(
+            (s) => s.contains(MaterialState.selected) ? const Color(0xFF64B5F6).withOpacity(0.4) : Colors.grey[800]),
       ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -211,16 +211,16 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: darkSurface,
         indicatorColor: const Color(0xFF64B5F6).withOpacity(0.18),
-        labelTextStyle: WidgetStateProperty.resolveWith(
+        labelTextStyle: MaterialStateProperty.resolveWith(
           (s) => TextStyle(
             fontSize: 11,
-            fontWeight: s.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-            color: s.contains(WidgetState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600],
+            fontWeight: s.contains(MaterialState.selected) ? FontWeight.w700 : FontWeight.w500,
+            color: s.contains(MaterialState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600],
           ),
         ),
-        iconTheme: WidgetStateProperty.resolveWith(
+        iconTheme: MaterialStateProperty.resolveWith(
           (s) => IconThemeData(
-            color: s.contains(WidgetState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600],
+            color: s.contains(MaterialState.selected) ? const Color(0xFF64B5F6) : Colors.grey[600],
             size: 22,
           ),
         ),
