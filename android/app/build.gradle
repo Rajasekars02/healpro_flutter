@@ -64,6 +64,8 @@ android {
         release {
             if (keystoreProperties['storeFile'] != null) {
                 signingConfig = signingConfigs.release
+            } else {
+                signingConfig = signingConfigs.debug
             }
         }
     }
