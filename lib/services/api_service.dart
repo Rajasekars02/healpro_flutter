@@ -4,8 +4,9 @@ import '../models/symptom_models.dart';
 import '../models/clinical_models.dart';
 
 class ApiService {
-  // Replace with appropriate backend URL (e.g., http://10.0.2.2:8000 for Android emulator)
-  static const String baseUrl = 'https://healpro-api.onrender.com';
+  final String baseUrl;
+
+  ApiService({this.baseUrl = 'https://healpro-api.onrender.com/api'});
 
   Future<List<String>> getSymptoms() async {
     try {
@@ -77,7 +78,7 @@ class ApiService {
       if (response.statusCode == 200) {
         return PredictResponse.fromJson(jsonDecode(response.body));
       }
-      throw Exception('Failed to get prediction');
+      throw Exception('Failed to get prediction: HTTP ${response.statusCode}');
     } catch (e) {
       throw Exception('Error: $e');
     }

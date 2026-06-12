@@ -33,7 +33,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web (release)
-        run: flutter build web --release --base-href "/healpro_flutter/"
+        run: flutter build web --release --base-href "/healpro_flutter/" --web-renderer html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
