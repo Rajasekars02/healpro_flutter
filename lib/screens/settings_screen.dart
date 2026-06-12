@@ -318,7 +318,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('HealPRO AI Diagnostics', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                        const Text('Version 1.0.0', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        const Text('Version 2.0.0', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     ),
                   ],
