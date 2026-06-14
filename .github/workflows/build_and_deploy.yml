@@ -42,13 +42,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
           
-      # Setup Keystore for Android Release
-      - name: Decode Keystore
-        run: |
-          echo "storePassword=healpro123" > android/key.properties
-          echo "keyPassword=healpro123" >> android/key.properties
-          echo "keyAlias=release" >> android/key.properties
-          echo "storeFile=release.jks" >> android/key.properties
 
       # Build Android APK
       - name: Build Android APK
