@@ -14,7 +14,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final _nameController = TextEditingController();
   final _ageController  = TextEditingController();
-  final _urlController  = TextEditingController();
   String _selectedGender = 'Prefer not to say';
   bool _profileEditing = false;
 
@@ -27,7 +26,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final profile = context.read<UserProfileService>();
       _nameController.text = profile.name;
       _ageController.text  = profile.age > 0 ? profile.age.toString() : '';
-      _urlController.text  = profile.serverUrl;
       setState(() => _selectedGender = profile.gender);
     });
   }
@@ -36,7 +34,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void dispose() {
     _nameController.dispose();
     _ageController.dispose();
-    _urlController.dispose();
     super.dispose();
   }
 
@@ -62,15 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _saveUrl() async {
-    final url = _urlController.text.trim();
-    if (url.isEmpty) return;
-    await context.read<UserProfileService>().setServerUrl(url);
-    if (mounted) FocusScope.of(context).unfocus();
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Server URL updated.'),
-    ));
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -201,33 +190,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: 12),
 
-          // ── Server Config ─────────────────────────────────────────────────
-          _SectionCard(
-            title: 'Backend Server URL',
-            icon: Icons.cloud_outlined,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextField(
-                  controller: _urlController,
-                  decoration: const InputDecoration(
-                    labelText: 'API Base URL',
-                    hintText: 'https://healpro-api.onrender.com/api',
-                    prefixIcon: Icon(Icons.link),
-                  ),
-                  keyboardType: TextInputType.url,
-                ),
-                const SizedBox(height: 10),
-                OutlinedButton.icon(
-                  onPressed: _saveUrl,
-                  icon: const Icon(Icons.check_outlined),
-                  label: const Text('Apply URL'),
-                ),
-              ],
-            ),
-          ),
 
-          const SizedBox(height: 12),
 
           // ── Health History ─────────────────────────────────────────────────
           _SectionCard(

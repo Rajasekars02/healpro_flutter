@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../models/symptom_models.dart';
@@ -11,7 +12,23 @@ class SymptomAIScreen extends StatefulWidget {
 }
 
 class _SymptomAIScreenState extends State<SymptomAIScreen> {
-  List<String> _availableSymptoms = [];
+  List<String> _availableSymptoms = [
+    'abdominal pain',
+    'chest pain',
+    'cough',
+    'diarrhea',
+    'dizziness',
+    'fatigue',
+    'fever',
+    'headache',
+    'joint pain',
+    'muscle ache',
+    'nausea',
+    'rash',
+    'shortness of breath',
+    'sore throat',
+    'vomiting'
+  ];
   final List<String> _selectedSymptoms = [];
   bool _isLoading = false;
   bool _isFinalLoading = false;
@@ -26,13 +43,32 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
 
   Future<void> _fetchSymptoms() async {
     try {
-      final api = Provider.of<ApiService>(context, listen: false);
-      final symptoms = await api.getSymptoms();
+      final csvString = await rootBundle.loadString('assets/dataset.csv');
+      final lines = csvString.split('\n');
+      final Set<String> allSymptoms = {};
+      
+      for (int i = 1; i < lines.length; i++) {
+        final line = lines[i].trim();
+        if (line.isEmpty) continue;
+        
+        // In this CSV, the second column (symptoms) is always the first quoted string
+        final match = RegExp(r'"([^"]+)"').firstMatch(line);
+        if (match != null && match.group(1) != null) {
+          final syms = match.group(1)!.split(',');
+          for (var s in syms) {
+            final clean = s.trim().toLowerCase();
+            if (clean.isNotEmpty) {
+              allSymptoms.add(clean);
+            }
+          }
+        }
+      }
+      
       setState(() {
-        _availableSymptoms = symptoms;
+        _availableSymptoms = allSymptoms.toList()..sort();
       });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint('Error loading local symptoms: $e');
     }
   }
 
@@ -149,7 +185,8 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                               if (val != null && !_selectedSymptoms.contains(val)) {
                                 setState(() {
                                   _selectedSymptoms.add(val);
-                                  _analyzeSymptoms(); // Automatically analyze on add
+                                  _diagnoseResult = null;
+                                  _finalDiagnosis = null;
                                 });
                               }
                             },
@@ -180,12 +217,8 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                   onDeleted: () {
                     setState(() {
                       _selectedSymptoms.remove(s);
-                      if (_selectedSymptoms.isEmpty) {
-                        _diagnoseResult = null;
-                        _finalDiagnosis = null;
-                      } else {
-                        _analyzeSymptoms();
-                      }
+                      _diagnoseResult = null;
+                      _finalDiagnosis = null;
                     });
                   },
                 )).toList(),
@@ -247,7 +280,8 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                           onPressed: () {
                             setState(() {
                               _selectedSymptoms.add(q);
-                              _analyzeSymptoms();
+                              _diagnoseResult = null;
+                              _finalDiagnosis = null;
                             });
                           },
                         )).toList(),

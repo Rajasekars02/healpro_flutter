@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/user_profile_service.dart';
+import '../services/api_service.dart';
 import 'symptom_ai_screen.dart';
 import 'clinical_risks_screen.dart';
 import 'age_insights_screen.dart';
@@ -22,6 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
     _NavItem(icon: Icons.timeline_outlined, activeIcon: Icons.timeline, label: 'Age Guide'),
     _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings, label: 'Settings'),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fire a background request to wake up the backend (Render free tier spin-up)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        context.read<ApiService>().getSymptoms().catchError((_) => <String>[]);
+      } catch (_) {}
+    });
+  }
 
   final List<Widget> _screens = [
     const SymptomAIScreen(),
