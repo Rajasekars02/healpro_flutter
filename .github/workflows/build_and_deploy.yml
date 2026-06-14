@@ -1,0 +1,59 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # Or use 'any'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Build Web
+      - name: Build Web App
+        run: flutter build web --release --base-href "/healpro_flutter/"
+
+      # Deploy Web to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          
+      # Setup Keystore for Android Release
+      - name: Decode Keystore
+        run: |
+          echo "storePassword=healpro123" > android/key.properties
+          echo "keyPassword=healpro123" >> android/key.properties
+          echo "keyAlias=release" >> android/key.properties
+          echo "storeFile=release.jks" >> android/key.properties
+
+      # Build Android APK
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # Upload APK Artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk

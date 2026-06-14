@@ -163,7 +163,7 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                     ),
                     const SizedBox(height: 16),
                     
-                    // Symptom dropdown selector
+                    // Symptom autocomplete selector
                     _availableSymptoms.isEmpty
                         ? const Center(
                             child: Padding(
@@ -171,24 +171,45 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                               child: CircularProgressIndicator(),
                             ),
                           )
-                        : DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search),
-                              hintText: 'Select a symptom...',
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            ),
-                            items: _availableSymptoms.map((String sym) {
-                              return DropdownMenuItem(value: sym, child: Text(sym));
-                            }).toList(),
-                            onChanged: (val) {
-                              if (val != null && !_selectedSymptoms.contains(val)) {
+                        : Autocomplete<String>(
+                            optionsBuilder: (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return _availableSymptoms.where((String option) {
+                                return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                              });
+                            },
+                            onSelected: (String selection) {
+                              if (!_selectedSymptoms.contains(selection)) {
                                 setState(() {
-                                  _selectedSymptoms.add(val);
+                                  _selectedSymptoms.add(selection);
                                   _diagnoseResult = null;
                                   _finalDiagnosis = null;
                                 });
                               }
+                            },
+                            fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+                              return TextField(
+                                controller: controller,
+                                focusNode: focusNode,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.search),
+                                  hintText: 'Type a symptom (e.g., headache)...',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                ),
+                                onSubmitted: (value) {
+                                  if (value.isNotEmpty && !_selectedSymptoms.contains(value)) {
+                                    setState(() {
+                                      _selectedSymptoms.add(value);
+                                      _diagnoseResult = null;
+                                      _finalDiagnosis = null;
+                                    });
+                                    controller.clear();
+                                  }
+                                },
+                              );
                             },
                           ),
                   ],
