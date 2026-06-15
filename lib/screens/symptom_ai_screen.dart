@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import '../services/api_service.dart';
 import '../models/symptom_models.dart';
+import 'nearby_hospitals_screen.dart';
 
 class SymptomAIScreen extends StatefulWidget {
   const SymptomAIScreen({super.key});
@@ -496,6 +497,7 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
                               ),
                             ],
                           ),
+                          _buildLocationAction(context),
                         ],
                       ),
                     ),
@@ -533,5 +535,53 @@ class _SymptomAIScreenState extends State<SymptomAIScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildLocationAction(BuildContext context) {
+    bool isAppendicitis = _finalDiagnosis!.disease.toLowerCase().contains('appendicitis');
+
+    if (isAppendicitis) {
+      return Container(
+        margin: const EdgeInsets.only(top: 16),
+        width: double.infinity,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NearbyHospitalsScreen(specializationFilter: 'Surgeon'),
+              ),
+            );
+          },
+          icon: const Icon(Icons.local_hospital),
+          label: const Text('URGENT: Find Nearby Appendicitis Surgeons'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.only(top: 16),
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NearbyHospitalsScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.location_on),
+          label: const Text('Find Nearby Hospitals'),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+        ),
+      );
+    }
   }
 }
